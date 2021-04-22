@@ -38,9 +38,12 @@ class BaseAdminExampleAdmin(BaseAdminMixin, admin.ModelAdmin):
         'display_after_save_fk_example',
         'display_after_save_m2m_example',
     )
+    readonly_fields = (
+        'display_image',
+    )
     fieldsets = (
         (None, {'fields': (
-            ('image',),
+            ('image', 'display_image',),
             ('datetime', 'date', 'time'),
             ('boolean',),
             ('after_save_fk_example', 'after_save_m2m_example'),
@@ -58,13 +61,13 @@ class BaseAdminExampleAdmin(BaseAdminMixin, admin.ModelAdmin):
         return ''
 
     def display_date(self, obj):
-        if obj and obj.datetime:
-            return self._display_date(obj.datetime)
+        if obj and obj.date:
+            return self._display_date(obj.date)
         return ''
 
     def display_time(self, obj):
-        if obj and obj.datetime:
-            return self._display_time(obj.datetime)
+        if obj and obj.time:
+            return self._display_time(obj.time)
         return ''
 
     def display_boolean(self, obj):

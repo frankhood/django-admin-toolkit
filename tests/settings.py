@@ -50,6 +50,9 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'tests.urls'
 
+MEDIA_URL = "tests/media/"
+MEDIA_ROOT = 'tests/media/'
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',

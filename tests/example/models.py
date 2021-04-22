@@ -32,10 +32,11 @@ class AfterSaveExample(models.Model):
 
 
 class BaseAdminExample(models.Model):
-    image = models.FileField(
+    image = models.ImageField(
         'Image',
         blank=True,
-        null=True
+        null=True,
+        upload_to='images'
     )
     datetime = models.DateTimeField(
         'Datetime',

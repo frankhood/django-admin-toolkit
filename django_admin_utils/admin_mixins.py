@@ -43,10 +43,10 @@ class BaseAdminMixin(object):
         return formats.date_format(localtime(datetime_field, get_current_timezone()), "SHORT_DATETIME_FORMAT")
 
     def _display_date(self, date_field):
-        return formats.date_format(localtime(date_field, get_current_timezone()), "SHORT_DATE_FORMAT")
+        return formats.date_format(date_field, "SHORT_DATE_FORMAT")
 
     def _display_time(self, time_field):
-        return formats.date_format(localtime(time_field, get_current_timezone()), "SHORT_TIME_FORMAT")
+        return formats.date_format(time_field, "H:i")
 
     def _display_boolean(self, boolean_field):
         return yesno(boolean_field)
