@@ -45,5 +45,9 @@ output/*/index.html
 
 # Sphinx
 docs/_build
+
+# Media
 tests/media
+
+# Python version
 .python-version
