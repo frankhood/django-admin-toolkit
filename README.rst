@@ -11,12 +11,10 @@ Django Admin Utils
 .. image:: https://codecov.io/gh/frankhood/django-admin-utils/branch/master/graph/badge.svg
     :target: https://codecov.io/gh/frankhood/django-admin-utils
 
-A set of mixins and methods to simplify the Django Admin development
-
-Documentation
+Overview
 -------------
 
-The full documentation is at https://django-admin-utils.readthedocs.io.
+A set of mixins and methods to simplify the Django Admin development
 
 Quickstart
 ----------
@@ -25,33 +23,23 @@ Install Django Admin Utils::
 
     pip install django-admin-utils
 
+
 Add it to your `INSTALLED_APPS`:
 
-.. code-block:: python
+::
 
     INSTALLED_APPS = (
         ...
-        'django_admin_utils.apps.DjangoAdminUtilsConfig',
+        'django_admin_utils',
         ...
     )
-
-Add Django Admin Utils's URL patterns:
-
-.. code-block:: python
-
-    from django_admin_utils import urls as django_admin_utils_urls
-
-
-    urlpatterns = [
-        ...
-        url(r'^', include(django_admin_utils_urls)),
-        ...
-    ]
 
 Features
 --------
 
-* TODO
+* EmptyValueMixinAdmin find another way to change the empty label
+* Complete testing of admin mixins
+* Add unit tests
 
 Running Tests
 -------------
