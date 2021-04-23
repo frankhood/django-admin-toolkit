@@ -10,7 +10,7 @@ from django.urls import reverse
 from django.utils.encoding import smart_text
 from django.utils.html import escape
 
-logger = logging.getLogger('django-admin-utils')
+logger = logging.getLogger('django-admin-toolkit')
 
 
 class VerboseForeignKeyRawIdWidget(ForeignKeyRawIdWidget):

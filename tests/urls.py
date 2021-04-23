@@ -8,7 +8,7 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^', include('django_admin_utils.urls', namespace='django_admin_utils')),
+    url(r'^', include('django_admin_toolkit.urls', namespace='django_admin_toolkit')),
 ]
 
 urlpatterns += staticfiles_urlpatterns()

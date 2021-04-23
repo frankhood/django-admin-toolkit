@@ -1,15 +1,15 @@
 =============================
-Django Admin Utils
+Django Admin toolkit
 =============================
 
-.. image:: https://badge.fury.io/py/django-admin-utils.svg
-    :target: https://badge.fury.io/py/django-admin-utils
+.. image:: https://badge.fury.io/py/django-admin-toolkit.svg
+    :target: https://badge.fury.io/py/django-admin-toolkit
 
-.. image:: https://travis-ci.org/frankhood/django-admin-utils.svg?branch=master
-    :target: https://travis-ci.org/frankhood/django-admin-utils
+.. image:: https://travis-ci.org/frankhood/django-admin-toolkit.svg?branch=master
+    :target: https://travis-ci.org/frankhood/django-admin-toolkit
 
-.. image:: https://codecov.io/gh/frankhood/django-admin-utils/branch/master/graph/badge.svg
-    :target: https://codecov.io/gh/frankhood/django-admin-utils
+.. image:: https://codecov.io/gh/frankhood/django-admin-toolkit/branch/master/graph/badge.svg
+    :target: https://codecov.io/gh/frankhood/django-admin-toolkit
 
 Overview
 -------------
@@ -19,9 +19,9 @@ A set of mixins and methods to simplify the Django Admin development
 Quickstart
 ----------
 
-Install Django Admin Utils::
+Install Django Admin toolkit::
 
-    pip install django-admin-utils
+    pip install django-admin-toolkit
 
 
 Add it to your `INSTALLED_APPS`:
@@ -30,7 +30,7 @@ Add it to your `INSTALLED_APPS`:
 
     INSTALLED_APPS = (
         ...
-        'django_admin_utils',
+        'django_admin_toolkit',
         ...
     )
 

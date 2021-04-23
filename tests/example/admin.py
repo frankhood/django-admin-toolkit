@@ -2,7 +2,7 @@ import uuid
 
 from django.contrib import admin
 
-from django_admin_utils.admin_mixins import AfterSaveMixinAdmin
+from django_admin_toolkit.admin_mixins import AfterSaveMixinAdmin
 from tests.example.models import AfterSaveExample
 
 

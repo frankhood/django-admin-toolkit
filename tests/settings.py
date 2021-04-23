@@ -30,7 +30,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'django_admin_utils',
+    'django_admin_toolkit',
 
     'tests.example',
 
