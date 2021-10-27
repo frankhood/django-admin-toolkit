@@ -11,7 +11,7 @@ except ImportError:
 
 
 def get_version(*file_paths):
-    """Retrieves the version from django_admin_toolkit/__init__.py"""
+    """Retrieves the version from admin_toolkit/__init__.py"""
     filename = os.path.join(os.path.dirname(__file__), *file_paths)
     version_file = open(filename).read()
     version_match = re.search(r"^__version__ = ['\"]([^'\"]*)['\"]",
@@ -21,7 +21,7 @@ def get_version(*file_paths):
     raise RuntimeError('Unable to find version string.')
 
 
-version = get_version("django_admin_toolkit", "__init__.py")
+version = get_version("admin_toolkit/__init__.py")
 
 
 if sys.argv[-1] == 'publish':
@@ -48,13 +48,13 @@ requirements = open('requirements.txt').readlines()
 setup(
     name='django-admin-toolkit',
     version=version,
-    description="""A set of mixins and methods to simplify the Django Admin development""",
+    description="""Multiple admin mixin for yours Django Admins""",
     long_description=readme + '\n\n' + history,
-    author='FrankHood Business Solutions SRL',
+    author='FrankHood Business Solutions srl',
     author_email='info@frankhood.it',
     url='https://github.com/frankhood/django-admin-toolkit',
     packages=[
-        'django_admin_toolkit',
+        'admin_toolkit',
     ],
     include_package_data=True,
     install_requires=requirements,
@@ -63,15 +63,14 @@ setup(
     keywords='django-admin-toolkit',
     classifiers=[
         'Development Status :: 3 - Alpha',
-        'Framework :: Django :: 1.11',
-        'Framework :: Django :: 2.1',
+        'Framework :: Django :: 2.2',
+        'Framework :: Django :: 3.2',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: BSD License',
         'Natural Language :: English',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
     ],
 )

@@ -1,4 +1,4 @@
-* Django Admin toolkit version:
+* Django Admin Toolkit version:
 * Django version:
 * Python version:
 * Operating System:

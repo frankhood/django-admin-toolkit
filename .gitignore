@@ -46,8 +46,14 @@ output/*/index.html
 # Sphinx
 docs/_build
 
-# Media
-tests/media
 
-# Python version
+.coverage
+.tox
 .python-version
+
+
+# Test media
+tests/media/*
+
+# database
+db.sqlite3

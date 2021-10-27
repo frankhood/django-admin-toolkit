@@ -2,25 +2,25 @@
 Usage
 =====
 
-To use Django Admin toolkit in a project, add it to your `INSTALLED_APPS`:
+To use Django Admin Toolkit in a project, add it to your `INSTALLED_APPS`:
 
 .. code-block:: python
 
     INSTALLED_APPS = (
         ...
-        'django_admin_toolkit.apps.DjangoAdmintoolkitConfig',
+        'admin_toolkit.apps.AdminToolkitConfig',
         ...
     )
 
-Add Django Admin toolkit's URL patterns:
+Add Django Admin Toolkit's URL patterns:
 
 .. code-block:: python
 
-    from django_admin_toolkit import urls as django_admin_toolkit_urls
+    from admin_toolkit import urls as admin_toolkit_urls
 
 
     urlpatterns = [
         ...
-        url(r'^', include(django_admin_toolkit_urls)),
+        url(r'^', include(admin_toolkit_urls)),
         ...
     ]

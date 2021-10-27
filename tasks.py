@@ -7,7 +7,7 @@ from invoke import task
 def open_browser(path):
     try:
         from urllib import pathname2url
-    except:
+    except Exception:
         from urllib.request import pathname2url
     webbrowser.open("file://" + pathname2url(os.path.abspath(path)))
 
@@ -50,7 +50,7 @@ def docs(c):
     """
     c.run("rm -f docs/django-admin-toolkit.rst")
     c.run("rm -f docs/modules.rst")
-    c.run("sphinx-apidoc -o docs/ django_admin_toolkit")
+    c.run("sphinx-apidoc -o docs/ admin_toolkit")
 
     c.run("sphinx-build -E -b html docs docs/_build")
     open_browser(path='docs/_build/html/index.html')

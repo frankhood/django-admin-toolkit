@@ -3,4 +3,6 @@ include CONTRIBUTING.rst
 include HISTORY.rst
 include LICENSE
 include README.rst
-recursive-include django_admin_toolkit *.html *.png *.gif *js *.css *jpg *jpeg *svg *py
+include requirements_test.txt
+include requirements.txt
+recursive-include admin_toolkit *.html *.png *.gif *js *.css *jpg *jpeg *svg *py

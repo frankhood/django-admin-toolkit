@@ -13,7 +13,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "^2hncw)^d1l$aaiy6d=s+-gz4j@@-ls_y61cvop+z81qshzt^p"
+SECRET_KEY = "$x_bw2ju8-+4$up0)ftr3+f6$5kqk#)s#lujqd&rdu1rr2s@p("
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -30,12 +30,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'django_admin_toolkit',
+    'admin_toolkit',
+
 
     'tests.example',
-
-    # if your app has other dependencies that need to be added to the site
-    # they should be added here
 ]
 
 MIDDLEWARE = [
@@ -49,9 +47,6 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'tests.urls'
-
-MEDIA_URL = "tests/media/"
-MEDIA_ROOT = 'tests/media/'
 
 TEMPLATES = [
     {
@@ -116,3 +111,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
+
+MEDIA_URL = "/tests/media/"
+
+MEDIA_ROOT = os.path.join(BASE_DIR, "tests/media")  # noqa
+
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
