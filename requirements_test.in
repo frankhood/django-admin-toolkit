@@ -1,0 +1,8 @@
+-r requirements_dev.in
+
+coverage
+mock
+flake8
+tox
+codecov
+Pillow

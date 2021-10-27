@@ -1,0 +1,11 @@
+invoke
+twine
+wheel
+zest.releaser
+bumpversion
+freezegun
+model_bakery
+factory-boy
+faker
+
+Django>2.2
