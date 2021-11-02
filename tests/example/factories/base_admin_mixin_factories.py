@@ -1,5 +1,4 @@
 import factory
-from django.apps import apps
 
 from tests.example.models import ExampleModelForBaseAdminMixin, ExampleM2MModelForBaseAdminMixin, \
     ExampleFkModelForBaseAdminMixin, ExampleGenericRelationModelForBaseAdminMixin

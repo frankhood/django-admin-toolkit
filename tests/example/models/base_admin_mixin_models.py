@@ -3,8 +3,8 @@ from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.urls import reverse
 
-from tests.example import querysets as app_queryset
 from tests.example import managers as app_managers
+from tests.example import querysets as app_queryset
 
 
 class ExampleModelForBaseAdminMixin(models.Model):
@@ -91,14 +91,3 @@ class ExampleGenericRelationModelForBaseAdminMixin(models.Model):
 
     def get_ct(self):
         return ContentType.objects.get(app_label=self._meta.app_label, model=self._meta.model_name)
-
-
-class ExampleModelForAfterSaveAdminMixin(models.Model):
-    objects = app_managers.ExampleModelForAfterSaveAdminMixinManager.from_queryset(
-        app_queryset.ExampleModelForAfterSaveAdminMixinQuerySet
-    )()
-
-    test_text = models.TextField("Test text")
-
-    def __str__(self):
-        return str(self.id)

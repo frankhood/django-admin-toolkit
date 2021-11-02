@@ -18,12 +18,14 @@ logger = logging.getLogger('django-admin-toolkit')
 class AfterSaveAdminMixin(admin.ModelAdmin):
 
     def log_addition(self, request, object, message):
-        super().log_addition(request, object, message)
+        log = super().log_addition(request, object, message)
         self.after_save(request, object, add=True, message=message)
+        return log
 
     def log_change(self, request, object, message):
-        super().log_change(request, object, message)
+        log = super().log_change(request, object, message)
         self.after_save(request, object, add=False, message=message)
+        return log
 
     def after_save(self, request, object, add, message):
         """
