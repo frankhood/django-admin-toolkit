@@ -7,5 +7,6 @@ freezegun
 model_bakery
 factory-boy
 faker
+types-freezegun
 
 Django>=3
