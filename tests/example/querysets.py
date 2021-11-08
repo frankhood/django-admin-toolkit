@@ -1,21 +1,61 @@
 from django.db import models
 
 
-class ExampleModelForBaseAdminMixinQuerySet(models.QuerySet):
+class BaseExampleModelQuerySet(models.QuerySet):
     ...
 
 
-class ExampleFkModelForBaseAdminMixinQuerySet(models.QuerySet):
+class BaseExampleFkModelQuerySet(models.QuerySet):
     ...
 
 
-class ExampleM2MModelForBaseAdminMixinQuerySet(models.QuerySet):
+class BaseExampleM2MModelQuerySet(models.QuerySet):
     ...
 
 
-class ExampleGenericRelationModelForBaseAdminMixinQuerySet(models.QuerySet):
+class BaseExampleGenericRelationModelQuerySet(models.QuerySet):
     ...
 
 
-class ExampleModelForAfterSaveAdminMixinQuerySet(models.QuerySet):
+class AfterSaveExampleModelQuerySet(models.QuerySet):
+    ...
+
+
+class AllReadonlyExampleModelQuerySet(models.QuerySet):
+    ...
+
+
+class ConfigurableWidgetsExampleModelQuerySet(models.QuerySet):
+    ...
+
+
+class ConfigurableWidgetsExampleFKModelQuerySet(models.QuerySet):
+    ...
+
+
+class ConfigurableWidgetsExampleM2MModelQuerySet(models.QuerySet):
+    ...
+
+
+class DetailInInlineExampleModelQuerySet(models.QuerySet):
+    ...
+
+
+class EmptyValueExampleModelQuerySet(models.QuerySet):
+    ...
+
+
+class ExtraButtonExampleModelQuerySet(models.QuerySet):
+    ...
+
+
+class FloatingExampleModelQuerySet(models.QuerySet):
+    ...
+
+
+class ImprovedRawIdFieldsExampleModelQuerySet(models.QuerySet):
+    ...
+
+
+class ImprovedRawIdFieldsExampleRelatedModelQuerySet(models.QuerySet):
     ...

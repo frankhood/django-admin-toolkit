@@ -1,0 +1,10 @@
+{% extends "admin/change_list.html" %}
+
+{% block extrahead %}
+    <script>
+        window.extraContext = window.extraContext || {};
+        window.extraContext.djangoAdminToolkit = window.extraContext.djangoAdminToolkit || {};
+        window.extraContext.djangoAdminToolkit.filterFloatingImageUrl = "{{ filter_image_url }}";
+    </script>
+    {{ block.super }}
+{% endblock extrahead %}

@@ -1,0 +1,16 @@
+div#changelist-filter{
+    height: 95% !important;
+    width: 200px;
+}
+div#changelist-filter div.filter-container{
+    overflow: auto;
+    height: 95% !important;
+    
+}
+.upper-fixed{
+    top: 5px !important;
+}
+
+#changelist-filter .label-click{
+    background-size: contain !important;
+}

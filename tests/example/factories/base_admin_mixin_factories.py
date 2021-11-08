@@ -1,37 +1,37 @@
 import factory
 
-from tests.example.models import ExampleModelForBaseAdminMixin, ExampleM2MModelForBaseAdminMixin, \
-    ExampleFkModelForBaseAdminMixin, ExampleGenericRelationModelForBaseAdminMixin
+from tests.example.models import BaseExampleModel, BaseExampleM2MModel, \
+    BaseExampleFkModel, BaseExampleGenericRelationModel
 
 
-class ExampleFkModelForBaseAdminMixinFactory(factory.django.DjangoModelFactory):
+class BaseExampleFkModelFactory(factory.django.DjangoModelFactory):
     test_text = factory.Faker("word")
 
     class Meta:
-        model = ExampleFkModelForBaseAdminMixin
+        model = BaseExampleFkModel
 
 
-class ExampleM2MModelForBaseAdminMixinFactory(factory.django.DjangoModelFactory):
+class BaseExampleM2MModelFactory(factory.django.DjangoModelFactory):
     test_text = factory.Faker("word")
 
     class Meta:
-        model = ExampleM2MModelForBaseAdminMixin
+        model = BaseExampleM2MModel
 
 
-class ExampleGenericRelationModelForBaseAdminMixinFactory(factory.django.DjangoModelFactory):
+class BaseExampleGenericRelationModelFactory(factory.django.DjangoModelFactory):
     test_text = factory.Faker("word")
 
     class Meta:
-        model = ExampleGenericRelationModelForBaseAdminMixin
+        model = BaseExampleGenericRelationModel
 
 
-class ExampleModelForBaseAdminMixinFactory(factory.django.DjangoModelFactory):
+class BaseExampleModelFactory(factory.django.DjangoModelFactory):
     test_boolean = factory.Faker("pybool")
     test_datetime = factory.Faker("date_time")
-    test_fk = factory.SubFactory(ExampleFkModelForBaseAdminMixinFactory)
+    test_fk = factory.SubFactory(BaseExampleFkModelFactory)
 
     class Meta:
-        model = ExampleModelForBaseAdminMixin
+        model = BaseExampleModel
 
     @factory.post_generation
     def test_m2m(self, create, m2m_entries, **kwargs):

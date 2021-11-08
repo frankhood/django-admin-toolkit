@@ -7,9 +7,9 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 
 from tests.example import models
-from tests.example.admin import ExampleModelForAfterSaveAdminMixinAdmin
+from tests.example.admin import AfterSaveExampleModelAdmin
 from tests.example.factories import (
-    ExampleModelForAfterSaveAdminMixinFactory
+    AfterSaveExampleModelFactory
 )
 
 
@@ -24,9 +24,9 @@ class AfterSaveAdminMixinUnitTest(TestCase):
         self.request = MockRequest()
 
     def test_after_save_on_logging_actions(self):
-        admin = ExampleModelForAfterSaveAdminMixinAdmin(models.ExampleModelForAfterSaveAdminMixin, self.site)
+        admin = AfterSaveExampleModelAdmin(models.AfterSaveExampleModel, self.site)
         self.request.user = User.objects.create(username='admin', is_superuser=True, is_staff=True)
-        obj = ExampleModelForAfterSaveAdminMixinFactory()
+        obj = AfterSaveExampleModelFactory()
         content_type = get_content_type_for_model(obj)
         tests = (
             (admin.log_addition, ADDITION, {'added': {}}),
@@ -34,7 +34,7 @@ class AfterSaveAdminMixinUnitTest(TestCase):
         )
         for method, flag, message in tests:
             with self.subTest(name=method.__name__):
-                with patch.object(ExampleModelForAfterSaveAdminMixinAdmin, "after_save") as after_save_mock_method:
+                with patch.object(AfterSaveExampleModelAdmin, "after_save") as after_save_mock_method:
                     created = method(self.request, obj, message)
                     fetched = LogEntry.objects.filter(action_flag=flag).latest('id')
                     self.assertEqual(created, fetched)

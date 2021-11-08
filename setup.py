@@ -63,7 +63,6 @@ setup(
     keywords='django-admin-toolkit',
     classifiers=[
         'Development Status :: 3 - Alpha',
-        'Framework :: Django :: 2.2',
         'Framework :: Django :: 3.2',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: BSD License',

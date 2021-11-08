@@ -7,56 +7,64 @@ from tests.example import managers as app_managers
 from tests.example import querysets as app_queryset
 
 
-class ExampleModelForBaseAdminMixin(models.Model):
-    objects = app_managers.ExampleModelForBaseAdminMixinManager.from_queryset(app_queryset.ExampleModelForBaseAdminMixinQuerySet)()
+class BaseExampleModel(models.Model):
+    objects = app_managers.BaseExampleModelManager.from_queryset(app_queryset.BaseExampleModelQuerySet)()
 
     test_boolean = models.BooleanField("Test bool", null=True)
     test_datetime = models.DateTimeField("Test datetime")
     test_fk = models.ForeignKey(
-        "example.ExampleFkModelForBaseAdminMixin",
+        "example.BaseExampleFkModel",
         verbose_name="Test fk",
         on_delete=models.CASCADE,
         related_name="example_for_base_admin_mixins"
     )
     test_image = models.ImageField("Test image", upload_to="example/images/")
     test_m2m = models.ManyToManyField(
-        "example.ExampleM2MModelForBaseAdminMixin",
+        "example.BaseExampleM2MModel",
         related_name="example_for_base_admin_mixins",
     )
     example_generic_relation_model_for_base_admin_mixin = GenericRelation(
-        "example.ExampleGenericRelationModelForBaseAdminMixin",
+        "example.BaseExampleGenericRelationModel",
         related_query_name='example_model_for_base_admin_mixin'
     )
 
     def __str__(self):
         return str(self.id)
 
+    class Meta:
+        verbose_name = "Base example model"
+        verbose_name_plural = "Base example models"
+
     @classmethod
     def admin_changelist_url(cls):
-        return reverse("admin:example_examplemodelforbaseadminmixin_changelist")
+        return reverse("admin:example_baseexamplemodel_changelist")
 
     def get_ct(self):
         return ContentType.objects.get(app_label=self._meta.app_label, model=self._meta.model_name)
 
 
-class ExampleFkModelForBaseAdminMixin(models.Model):
-    objects = app_managers.ExampleFkModelForBaseAdminMixinManager.from_queryset(
-        app_queryset.ExampleFkModelForBaseAdminMixinQuerySet
+class BaseExampleFkModel(models.Model):
+    objects = app_managers.BaseExampleFkModelManager.from_queryset(
+        app_queryset.BaseExampleFkModelQuerySet
     )()
 
     test_text = models.TextField("Test text")
 
+    class Meta:
+        verbose_name = "Base example FK model"
+        verbose_name_plural = "Base example FK models"
+
     def __str__(self):
-        return str(self.id)
+        return str(self.test_text)
 
     @property
     def admin_change_url(self):
-        return reverse("admin:example_examplefkmodelforbaseadminmixin_change", kwargs={"object_id": self.id})
+        return reverse("admin:example_baseexamplefkmodel_change", kwargs={"object_id": self.id})
 
 
-class ExampleM2MModelForBaseAdminMixin(models.Model):
-    objects = app_managers.ExampleM2MModelForBaseAdminMixinManager.from_queryset(
-        app_queryset.ExampleM2MModelForBaseAdminMixinQuerySet
+class BaseExampleM2MModel(models.Model):
+    objects = app_managers.BaseExampleM2MModelManager.from_queryset(
+        app_queryset.BaseExampleM2MModelQuerySet
     )()
 
     test_text = models.TextField("Test text")
@@ -64,17 +72,21 @@ class ExampleM2MModelForBaseAdminMixin(models.Model):
     def __str__(self):
         return str(self.id)
 
+    class Meta:
+        verbose_name = "Base example M2M model"
+        verbose_name_plural = "Base example M2M models"
+
     @classmethod
     def admin_changelist_url(cls):
-        return reverse("admin:example_examplem2mmodelforbaseadminmixin_changelist")
+        return reverse("admin:example_baseexamplem2mmodel_changelist")
 
     def get_ct(self):
         return ContentType.objects.get(app_label=self._meta.app_label, model=self._meta.model_name)
 
 
-class ExampleGenericRelationModelForBaseAdminMixin(models.Model):
-    objects = app_managers.ExampleGenericRelationModelForBaseAdminMixinManager.from_queryset(
-        app_queryset.ExampleGenericRelationModelForBaseAdminMixinQuerySet
+class BaseExampleGenericRelationModel(models.Model):
+    objects = app_managers.BaseExampleGenericRelationModelManager.from_queryset(
+        app_queryset.BaseExampleGenericRelationModelQuerySet
     )()
 
     test_text = models.TextField("Test text")
@@ -82,12 +94,16 @@ class ExampleGenericRelationModelForBaseAdminMixin(models.Model):
     object_id = models.PositiveIntegerField(blank=True, null=True)
     test_generic_fk = GenericForeignKey('content_type', 'object_id')
 
+    class Meta:
+        verbose_name = "Base example generic relation model"
+        verbose_name_plural = "Base example generic relation models"
+
     def __str__(self):
         return str(self.id)
 
     @classmethod
     def admin_changelist_url(cls):
-        return reverse("admin:example_examplegenericrelationmodelforbaseadminmixin_changelist")
+        return reverse("admin:example_baseexamplegenericrelationmodel_changelist")
 
     def get_ct(self):
         return ContentType.objects.get(app_label=self._meta.app_label, model=self._meta.model_name)

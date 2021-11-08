@@ -5,6 +5,7 @@ import logging
 from django.contrib import admin
 from django.contrib.admin.sites import site
 from django.template.defaultfilters import yesno
+from django.templatetags.static import static
 from django.utils import formats
 from django.utils.safestring import mark_safe
 from django.utils.timezone import localtime, get_current_timezone
@@ -42,7 +43,7 @@ class AllReadonlyAdminMixin(object):
             return [x.name for x in self.model._meta.fields] + list(readonly_fields)
         return [] + list(readonly_fields)
 
-    def has_add_permission(self, request):
+    def has_add_permission(self, request, obj=None):
         return False
 
 
@@ -58,7 +59,7 @@ class AllReadonlyAdminInlineMixin(object):
             result.remove('id')
         return result + list(readonly_fields) or []
 
-    def has_add_permission(self, request):
+    def has_add_permission(self, request, obj=None):
         return False
 
 
@@ -66,7 +67,7 @@ class DetailInInlineAdminMixin(object):
     class Media:
         js = []
         css = {
-            'all': ('templates/admin/css/admin_buttons.css',),
+            'all': ('css/admin_buttons.css',),
         }
 
     def get_fields(self, request, obj=None):
@@ -79,14 +80,17 @@ class DetailInInlineAdminMixin(object):
 
     def display_inline_obj(self, obj):
         if obj and obj.id:
-            return mark_safe('<a href="{0}" target="_blank" class="admin-button admin-button-success">Dettaglio</a>\
-            '.format(obj.admin_change_url, ))
+            return mark_safe(
+                '<a href="{0}" target="_blank" class="admin-button admin-button-success">{1}</a>'.format(
+                    obj.admin_change_url, _("Detail")
+                )
+            )
         return '---'
     display_inline_obj.short_description = _("Link")
     display_inline_obj.allow_tags = True
 
 
-class EmptyValueMixinAdmin(object):
+class EmptyValueAdminMixin(object):
     empty_values = {}
 
     def formfield_for_foreignkey(self, db_field, request=None, **kwargs):
@@ -103,7 +107,7 @@ class ExtraButtonAdminMixin(object):
     # * class
     extra_button = None
 
-    change_list_template = 'templates/admin/change_list_with_extrabuttons.html'
+    change_list_template = 'admin/change_list_with_extrabuttons.html'
 
     def get_extra_button(self, request):
         return self.extra_button
@@ -119,39 +123,52 @@ class ExtraButtonAdminMixin(object):
 class FloatingAdminMixin(object):
     """ Inherit from this class to collapse filters in ChangeListView """
 
+    filter_image = "img/fh_filter.png"
+    change_list_template = "admin/change_list_floating_filter.html"
+
     class Media:
         js = (
-            'templates/admin/js/jquery.tabSlideOut.v1.3.js',
-            'templates/admin/js/admin_floating.js',
+            'js/jquery.tabSlideOut.v1.3.js',
+            'js/admin_floating.js',
         )
         css = {
-            'all': ('templates/admin/css/admin_floating.css',),
+            'all': ('css/admin_floating.css',),
         }
 
+    def get_filter_image(self):
+        return self.filter_image
 
-class ImproveRawIdFieldsAdminMixin(object):  # admin.ModelAdmin
+    def changelist_view(self, request, extra_context=None):
+        extra_context = {
+            "filter_image_url": static(self.get_filter_image())
+        }
+        return super().changelist_view(request, extra_context)
+
+
+class ImprovedRawIdFieldsAdminMixin(object):  # admin.ModelAdmin
     """
-    in your admin.py insert
+    in your admin_mixins.py insert
 
-    class YourModelAdmin(ImproveRawIdFieldsAdminMixin,admin.ModelAdmin):
+    class YourModelAdmin(ImprovedRawIdFieldsAdminMixin,admin.ModelAdmin):
         ...
         improved_raw_id_fields = ['user','events']
         ...
     """
+    improved_raw_id_fields = []
 
     def formfield_for_dbfield(self, db_field, **kwargs):
         if db_field.name in self.improved_raw_id_fields:
             kwargs.pop("request", None)
-            type = db_field.rel.__class__.__name__
+            type = db_field.remote_field.__class__.__name__
             if type == "ManyToOneRel":
-                kwargs['widget'] = VerboseForeignKeyRawIdWidget(db_field.rel, site)
+                kwargs['widget'] = VerboseForeignKeyRawIdWidget(db_field.remote_field, site)
             elif type == "ManyToManyRel":
-                kwargs['widget'] = VerboseManyToManyRawIdWidget(db_field.rel, site)
+                kwargs['widget'] = VerboseManyToManyRawIdWidget(db_field.remote_field, site)
             return db_field.formfield(**kwargs)
         return super().formfield_for_dbfield(db_field, **kwargs)
 
 
-class ConfigurableWidgetsMixinAdmin(object):
+class ConfigurableWidgetsAdminMixin(object):
     """
     Use ConfigurableWidgetsMixinAdmin if you want to customize quickly
     default widget/label/help_text or every related admin form configurations
@@ -160,7 +177,7 @@ class ConfigurableWidgetsMixinAdmin(object):
     You can use it for InlineAdmin, too
 
     How to use it
-    `yourapp/admin.py`
+    `yourapp/admin_mixins.py`
 
     from django.contrib import admin
     from fhcore.apps.db.admin.mixins import ConfigurableWidgetsMixinAdmin
@@ -194,31 +211,37 @@ class ConfigurableWidgetsMixinAdmin(object):
     m2mfield_overrides = {}
 
     def formfield_for_dbfield(self, db_field, request=None, **kwargs):
-        if (self.dbfield_overrides and
-                db_field.name in self.dbfield_overrides):
+        if (
+                self.dbfield_overrides
+                and db_field.name in self.dbfield_overrides
+        ):
+            db_field.help_text = self.dbfield_overrides[db_field.name]
             kwargs.update(
                 self.dbfield_overrides[db_field.name]
             )
-        return super().formfield_for_dbfield(
-            db_field, request, **kwargs)
+        return super().formfield_for_dbfield(db_field, request, **kwargs)
 
     def formfield_for_foreignkey(self, db_field, request=None, **kwargs):
-        if (self.fkfield_overrides and
-                db_field.name in self.fkfield_overrides):
+        if (
+                self.fkfield_overrides
+                and db_field.name in self.fkfield_overrides
+        ):
+            db_field.help_text = self.fkfield_overrides[db_field.name]
             kwargs.update(
                 self.fkfield_overrides[db_field.name]
             )
-        return super().formfield_for_foreignkey(
-            db_field, request, **kwargs)
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
     def formfield_for_manytomany(self, db_field, request, **kwargs):
-        if (self.m2mfield_overrides and
-                db_field.name in self.m2mfield_overrides):
+        if (
+                self.m2mfield_overrides
+                and db_field.name in self.m2mfield_overrides
+        ):
+            db_field.help_text = self.m2mfield_overrides[db_field.name]
             kwargs.update(
                 self.m2mfield_overrides[db_field.name]
             )
-        return super().formfield_for_manytomany(
-            db_field, request, **kwargs)
+        return super().formfield_for_manytomany(db_field, request, **kwargs)
 
 
 class BaseAdminMixin(object):

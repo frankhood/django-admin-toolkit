@@ -1,10 +1,10 @@
 import factory
 
-from tests.example.models import ExampleModelForAfterSaveAdminMixin
+from tests.example.models import AfterSaveExampleModel
 
 
-class ExampleModelForAfterSaveAdminMixinFactory(factory.django.DjangoModelFactory):
+class AfterSaveExampleModelFactory(factory.django.DjangoModelFactory):
     test_text = factory.Faker("word")
 
     class Meta:
-        model = ExampleModelForAfterSaveAdminMixin
+        model = AfterSaveExampleModel

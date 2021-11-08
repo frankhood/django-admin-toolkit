@@ -1,7 +1,7 @@
 include AUTHORS.rst
 include CONTRIBUTING.rst
 include HISTORY.rst
-include LICENSE
+include LICENSE.md
 include README.rst
 include requirements_test.txt
 include requirements.txt

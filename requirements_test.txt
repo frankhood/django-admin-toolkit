@@ -24,21 +24,21 @@ colorama==0.4.4
     # via
     #   twine
     #   zest.releaser
-coverage==6.0.2
+coverage==6.1.1
     # via
     #   -r requirements_test.in
     #   codecov
 distlib==0.3.3
     # via virtualenv
-docutils==0.17.1
+docutils==0.18
     # via readme-renderer
-factory-boy==3.2.0
+factory-boy==3.2.1
     # via -r requirements_dev.in
-faker==9.3.1
+faker==9.8.0
     # via
     #   -r requirements_dev.in
     #   factory-boy
-filelock==3.3.0
+filelock==3.3.2
     # via
     #   tox
     #   virtualenv
@@ -57,7 +57,7 @@ importlib-metadata==4.2.0
     #   tox
     #   twine
     #   virtualenv
-importlib-resources==5.2.2
+importlib-resources==5.4.0
     # via virtualenv
 invoke==1.6.0
     # via -r requirements_dev.in
@@ -69,11 +69,11 @@ mock==4.0.3
     # via -r requirements_test.in
 model-bakery==1.3.3
     # via -r requirements_dev.in
-packaging==21.0
+packaging==21.2
     # via
     #   bleach
     #   tox
-pillow==8.3.2
+pillow==8.4.0
     # via -r requirements_test.in
 pkginfo==1.7.1
     # via twine
@@ -81,7 +81,7 @@ platformdirs==2.4.0
     # via virtualenv
 pluggy==1.0.0
     # via tox
-py==1.10.0
+py==1.11.0
     # via tox
 pycodestyle==2.8.0
     # via flake8
@@ -126,23 +126,24 @@ tox==3.24.4
     # via -r requirements_test.in
 tqdm==4.62.3
     # via twine
-twine==3.4.2
+twine==3.5.0
     # via
     #   -r requirements_dev.in
     #   zest.releaser
 typing-extensions==3.10.0.2
     # via
     #   asgiref
+    #   faker
     #   importlib-metadata
 urllib3==1.26.7
     # via requests
-virtualenv==20.8.1
+virtualenv==20.10.0
     # via tox
 webencodings==0.5.1
     # via bleach
 wheel==0.37.0
     # via -r requirements_dev.in
-zest.releaser==6.22.1
+zest.releaser==6.22.2
     # via -r requirements_dev.in
 zipp==3.6.0
     # via

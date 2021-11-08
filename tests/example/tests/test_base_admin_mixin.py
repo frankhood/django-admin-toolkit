@@ -5,11 +5,11 @@ from django.test import TestCase
 from django.utils import timezone
 
 from tests.example import models
-from tests.example.admin import ExampleModelForBaseAdminMixinAdmin, ExampleFkModelForBaseAdminMixinAdmin
+from tests.example.admin import BaseExampleModelAdmin, BaseExampleFkModelAdmin
 from tests.example.factories import (
-    ExampleModelForBaseAdminMixinFactory,
-    ExampleM2MModelForBaseAdminMixinFactory,
-    ExampleFkModelForBaseAdminMixinFactory, ExampleGenericRelationModelForBaseAdminMixinFactory
+    BaseExampleModelFactory,
+    BaseExampleM2MModelFactory,
+    BaseExampleFkModelFactory, BaseExampleGenericRelationModelFactory
 )
 
 
@@ -23,8 +23,8 @@ class BaseAdminMixinUnitTest(TestCase):
         self.site = AdminSite()
 
     def test__display_image(self):
-        example = ExampleModelForBaseAdminMixinFactory(test_image="tests/test_images/test_image.png")
-        admin = ExampleModelForBaseAdminMixinAdmin(models.ExampleModelForBaseAdminMixin, self.site)
+        example = BaseExampleModelFactory(test_image="tests/test_images/test_image.png")
+        admin = BaseExampleModelAdmin(models.BaseExampleModel, self.site)
         self.assertEqual(
             admin._display_image(example.test_image),
             """<a href='/tests/media/tests/test_images/test_image.png' target='_blank'><img src='/tests/media/tests/test_images/test_image.png' width='80' heigth='80' /></a>"""
@@ -32,82 +32,82 @@ class BaseAdminMixinUnitTest(TestCase):
 
     def test__display_datetime(self):
         with freezegun.freeze_time("2020-12-12 00:00:00"):
-            example = ExampleModelForBaseAdminMixinFactory(test_datetime=timezone.now())
-            admin = ExampleModelForBaseAdminMixinAdmin(models.ExampleModelForBaseAdminMixin, self.site)
+            example = BaseExampleModelFactory(test_datetime=timezone.now())
+            admin = BaseExampleModelAdmin(models.BaseExampleModel, self.site)
             self.assertEqual(admin._display_datetime(example.test_datetime), "12/12/2020 midnight")
 
     def test__display_date(self):
         with freezegun.freeze_time("2020-12-12 00:00:00"):
-            example = ExampleModelForBaseAdminMixinFactory(test_datetime=timezone.now())
-            admin = ExampleModelForBaseAdminMixinAdmin(models.ExampleModelForBaseAdminMixin, self.site)
+            example = BaseExampleModelFactory(test_datetime=timezone.now())
+            admin = BaseExampleModelAdmin(models.BaseExampleModel, self.site)
             self.assertEqual(admin._display_date(example.test_datetime), "12/12/2020")
 
     def test__display_time(self):
         with freezegun.freeze_time("2020-12-12 00:00:00"):
-            example = ExampleModelForBaseAdminMixinFactory(test_datetime=timezone.now())
-            admin = ExampleModelForBaseAdminMixinAdmin(models.ExampleModelForBaseAdminMixin, self.site)
+            example = BaseExampleModelFactory(test_datetime=timezone.now())
+            admin = BaseExampleModelAdmin(models.BaseExampleModel, self.site)
             self.assertEqual(admin._display_time(example.test_datetime), "00:00")
 
     def test__display_boolean(self):
         with self.subTest("test_boolean True"):
-            example = ExampleModelForBaseAdminMixinFactory(test_boolean=True)
-            admin = ExampleModelForBaseAdminMixinAdmin(models.ExampleModelForBaseAdminMixin, self.site)
+            example = BaseExampleModelFactory(test_boolean=True)
+            admin = BaseExampleModelAdmin(models.BaseExampleModel, self.site)
             self.assertEqual(admin._display_boolean(example.test_boolean), "yes")
         with self.subTest("test_boolean False"):
-            example = ExampleModelForBaseAdminMixinFactory(test_boolean=False)
-            admin = ExampleModelForBaseAdminMixinAdmin(models.ExampleModelForBaseAdminMixin, self.site)
+            example = BaseExampleModelFactory(test_boolean=False)
+            admin = BaseExampleModelAdmin(models.BaseExampleModel, self.site)
             self.assertEqual(admin._display_boolean(example.test_boolean), "no")
         with self.subTest("test_boolean None"):
-            example = ExampleModelForBaseAdminMixinFactory(test_boolean=None)
-            admin = ExampleModelForBaseAdminMixinAdmin(models.ExampleModelForBaseAdminMixin, self.site)
+            example = BaseExampleModelFactory(test_boolean=None)
+            admin = BaseExampleModelAdmin(models.BaseExampleModel, self.site)
             self.assertEqual(admin._display_boolean(example.test_boolean), "maybe")
 
     def test__display_fk_object(self):
-        example = ExampleModelForBaseAdminMixinFactory()
-        admin = ExampleModelForBaseAdminMixinAdmin(models.ExampleModelForBaseAdminMixin, self.site)
+        example = BaseExampleModelFactory()
+        admin = BaseExampleModelAdmin(models.BaseExampleModel, self.site)
         self.assertEqual(
             admin._display_fk_object(example.test_fk),
-            """<a href="/admin/example/examplefkmodelforbaseadminmixin/1/change/" target="_blank">1</a>"""
+            """<a href="/admin/example/baseexamplefkmodel/1/change/" target="_blank">1</a>"""
         )
 
     def test__display_m2m_objects(self):
-        m2m_object_1 = ExampleM2MModelForBaseAdminMixinFactory()
-        m2m_object_2 = ExampleM2MModelForBaseAdminMixinFactory()
-        m2m_object_3 = ExampleM2MModelForBaseAdminMixinFactory()
-        example = ExampleModelForBaseAdminMixinFactory(test_m2m=[m2m_object_1, m2m_object_2, m2m_object_3])
+        m2m_object_1 = BaseExampleM2MModelFactory()
+        m2m_object_2 = BaseExampleM2MModelFactory()
+        m2m_object_3 = BaseExampleM2MModelFactory()
+        example = BaseExampleModelFactory(test_m2m=[m2m_object_1, m2m_object_2, m2m_object_3])
         example.save()
-        admin = ExampleModelForBaseAdminMixinAdmin(models.ExampleModelForBaseAdminMixin, self.site)
+        admin = BaseExampleModelAdmin(models.BaseExampleModel, self.site)
         self.assertEqual(
             admin._display_m2m_objects(example, "test_m2m"),
-            """<a href="/admin/example/examplem2mmodelforbaseadminmixin/?example_for_base_admin_mixins=1" target="_blank">Display 3 elements</a>"""
+            """<a href="/admin/example/baseexamplem2mmodel/?example_for_base_admin_mixins=1" target="_blank">Display 3 elements</a>"""
         )
 
     def test__display_related_objects(self):
         with self.subTest("M2M"):
-            m2m_object_1 = ExampleM2MModelForBaseAdminMixinFactory()
-            m2m_object_2 = ExampleM2MModelForBaseAdminMixinFactory()
-            m2m_object_3 = ExampleM2MModelForBaseAdminMixinFactory()
-            example = ExampleModelForBaseAdminMixinFactory(test_m2m=[m2m_object_1, m2m_object_2, m2m_object_3])
-            admin = ExampleModelForBaseAdminMixinAdmin(models.ExampleModelForBaseAdminMixin, self.site)
+            m2m_object_1 = BaseExampleM2MModelFactory()
+            m2m_object_2 = BaseExampleM2MModelFactory()
+            m2m_object_3 = BaseExampleM2MModelFactory()
+            example = BaseExampleModelFactory(test_m2m=[m2m_object_1, m2m_object_2, m2m_object_3])
+            admin = BaseExampleModelAdmin(models.BaseExampleModel, self.site)
             self.assertEqual(
                 admin._display_related_objects(example, "test_m2m"),
-                """<a href="/admin/example/examplemodelforbaseadminmixin/?ExampleModelForBaseAdminMixin=1" target="_blank">Display 3 elements</a>"""
+                """<a href="/admin/example/baseexamplem2mmodel/?baseexamplemodel=1" target="_blank">Display 3 elements</a>"""
             )
         with self.subTest("FK"):
-            example = ExampleFkModelForBaseAdminMixinFactory()
-            ExampleModelForBaseAdminMixinFactory(test_fk=example)
-            admin = ExampleFkModelForBaseAdminMixinAdmin(models.ExampleFkModelForBaseAdminMixin, self.site)
+            example = BaseExampleFkModelFactory()
+            BaseExampleModelFactory(test_fk=example)
+            admin = BaseExampleFkModelAdmin(models.BaseExampleFkModel, self.site)
             self.assertEqual(
                 admin._display_related_objects(example, "example_for_base_admin_mixins"),
-                """<a href="/admin/example/examplemodelforbaseadminmixin/?test_fk=2" target="_blank">Display 1 elements</a>"""
+                """<a href="/admin/example/baseexamplemodel/?test_fk=2" target="_blank">Display 1 elements</a>"""
             )
 
     def test__display_generic_related_objects(self):
-        example_model = ExampleModelForBaseAdminMixinFactory()
-        example_model_content_type = ContentType.objects.get(app_label="example", model="examplemodelforbaseadminmixin")
-        ExampleGenericRelationModelForBaseAdminMixinFactory(content_type=example_model_content_type, object_id=example_model.id)
-        admin = ExampleModelForBaseAdminMixinAdmin(models.ExampleModelForBaseAdminMixin, self.site)
+        example_model = BaseExampleModelFactory()
+        example_model_content_type = ContentType.objects.get(app_label="example", model="baseexamplemodel")
+        BaseExampleGenericRelationModelFactory(content_type=example_model_content_type, object_id=example_model.id)
+        admin = BaseExampleModelAdmin(models.BaseExampleModel, self.site)
         self.assertEqual(
             admin._display_generic_related_objects(example_model, "example_generic_relation_model_for_base_admin_mixin", "Example Generic Relation Model For Base Admin Mixins"),
-            """<a href="/admin/example/examplegenericrelationmodelforbaseadminmixin/?content_type=9&object_id=1" target="_blank">Display 1 Example Generic Relation Model For Base Admin Mixins</a>"""
+            """<a href="/admin/example/baseexamplegenericrelationmodel/?content_type=19&object_id=1" target="_blank">Display 1 Example Generic Relation Model For Base Admin Mixins</a>"""
         )
