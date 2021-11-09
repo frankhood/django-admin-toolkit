@@ -410,13 +410,87 @@ This is the final result:
 ExtraButtonAdminMixin
 _____________________
 
+This admin mixin allows you to add extra buttons links next to the add button in a simple and immediate way.
+
+.. code-block:: python
+
+    @admin.register(app_models.ExtraButtonExampleModel)
+    class ExtraButtonExampleModelAdmin(ExtraButtonAdminMixin, admin.ModelAdmin):
+        list_display = ("id", "test_text")
+        fields = ("test_text",)
+        extra_button = [
+            {
+                "label": "Example Extra Button",
+                "url": "http://example.com",
+                "class": ""
+            }
+        ]
+
+This is the final result:
+
+.. image:: docs/readme_images/extra_button_changelist.png
+    :alt: Extra button admin mixin changelist Image.
 
 
+FloatingAdminMixin
+__________________
 
-Features
---------
+This mixin makes the list filters collapsible vertically
+in such a way as to have more space for any columns that otherwise would not be seen.
 
-* TODO
+.. code-block:: python
+
+    @admin.register(app_models.FloatingExampleModel)
+    class FloatingExampleModelAdmin(FloatingAdminMixin, admin.ModelAdmin):
+        list_display = ("id", "test_text")
+        list_filter = ("test_text",)
+        fields = ("test_text",)
+
+
+This is the final result:
+
+
+#. When the list filter is collapsed.
+    .. image:: docs/readme_images/floating_changelist_collapsed.png
+        :alt: Floating admin mixin collapsed in changelist Image.
+
+#. When the list filter is decollapsed.
+    .. image:: docs/readme_images/floating_changelist_decollapsed.png
+        :alt: Floating admin mixin decollapsed in changelist Image.
+
+
+ImprovedRawIdFieldsAdminMixin
+_____________________________
+
+This admin mixin allows you to view the link of the changelist/changeform
+of the selected objects inside the raw_id_field on ForeignKey and ManyToMany.
+
+.. code-block:: python
+
+    @admin.register(app_models.ImprovedRawIdFieldsExampleModel)
+    class ImprovedRawIdFieldsExampleModelAdmin(ImprovedRawIdFieldsAdminMixin, admin.ModelAdmin):
+        improved_raw_id_fields = ["test_fk", "test_m2m"]
+        list_display = ("id", "test_name",)
+        fieldsets = (
+            (None, {"fields": (
+                ("test_name",),
+                ("test_fk", "test_m2m"),
+            )}),
+        )
+
+
+This is the result:
+
+
+#. When adding an object.
+    .. image:: docs/readme_images/improve_raw_fields_changeform_add.png
+        :alt: Improve Raw Id Fields admin mixin in changeform add Image.
+
+
+#. When changing an object.
+    .. image:: docs/readme_images/improve_raw_fields_changeform_change.png
+        :alt: Improve Raw Id Fields admin mixin in changeform change Image.
+
 
 Running Tests
 -------------

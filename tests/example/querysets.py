@@ -59,3 +59,7 @@ class ImprovedRawIdFieldsExampleModelQuerySet(models.QuerySet):
 
 class ImprovedRawIdFieldsExampleRelatedModelQuerySet(models.QuerySet):
     ...
+
+
+class AdminFilterExampleModelQuerySet(models.QuerySet):
+    ...

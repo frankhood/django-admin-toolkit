@@ -10,7 +10,6 @@ class MockRequest:
 
 
 class ExtraButtonAdminMixinUnitTest(TestCase):
-
     def setUp(self) -> None:
         self.site = AdminSite()
         self.request = MockRequest()
@@ -23,7 +22,7 @@ class ExtraButtonAdminMixinUnitTest(TestCase):
                 {
                     "label": "Example Extra Button",
                     "url": "http://example.com",
-                    "class": "ciccio"
+                    "class": "",
                 }
-            ]
+            ],
         )

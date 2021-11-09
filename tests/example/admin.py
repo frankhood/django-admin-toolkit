@@ -3,14 +3,12 @@ from django.contrib import admin
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
-from admin_toolkit.admin_mixins import BaseAdminMixin, AfterSaveAdminMixin, AllReadonlyAdminInlineMixin, AllReadonlyAdminMixin, \
-    ConfigurableWidgetsAdminMixin, DetailInInlineAdminMixin, EmptyValueAdminMixin, ExtraButtonAdminMixin, \
-    FloatingAdminMixin, ImprovedRawIdFieldsAdminMixin
+from admin_toolkit import admin_mixins
 from tests.example import models as app_models
 
 
 @admin.register(app_models.BaseExampleFkModel)
-class BaseExampleFkModelAdmin(BaseAdminMixin, admin.ModelAdmin):
+class BaseExampleFkModelAdmin(admin_mixins.BaseAdminMixin, admin.ModelAdmin):
     list_display = ("__str__", "test_text")
     fields = ("test_text",)
 
@@ -28,7 +26,7 @@ class BaseExampleGenericRelationModelAdmin(admin.ModelAdmin):
 
 
 @admin.register(app_models.BaseExampleModel)
-class BaseExampleModelAdmin(BaseAdminMixin, admin.ModelAdmin):
+class BaseExampleModelAdmin(admin_mixins.BaseAdminMixin, admin.ModelAdmin):
     list_display = (
         "__str__",
         "display_test_boolean",
@@ -91,68 +89,111 @@ class BaseExampleModelAdmin(BaseAdminMixin, admin.ModelAdmin):
     @mark_safe
     def display_test_m2m(self, obj):
         if obj and obj.test_m2m:
-            return self._display_m2m_objects(obj, m2m_field_name="test_m2m", label="Example M2Ms")
+            return self._display_m2m_objects(
+                obj, m2m_field_name="test_m2m", label="Example M2Ms"
+            )
         return ""
 
     @mark_safe
     def display_generic_relation(self, obj):
         if obj and obj.id:
-            return self._display_generic_related_objects(obj, "example_generic_relation_model_for_base_admin_mixin", "Example Generic Relations")
+            return self._display_generic_related_objects(
+                obj,
+                "example_generic_relation_model_for_base_admin_mixin",
+                "Example Generic Relations",
+            )
         return ""
 
 
 @admin.register(app_models.AfterSaveExampleModel)
-class AfterSaveExampleModelAdmin(AfterSaveAdminMixin, admin.ModelAdmin):
+class AfterSaveExampleModelAdmin(admin_mixins.AfterSaveAdminMixin, admin.ModelAdmin):
     list_display = ("__str__", "test_text")
     fields = ("test_text",)
 
 
-class AllReadonlyExampleModelAdminInline(AllReadonlyAdminInlineMixin, admin.TabularInline):
+class AllReadonlyExampleModelAdminInline(
+    admin_mixins.AllReadonlyAdminInlineMixin, admin.TabularInline
+):
     model = app_models.AllReadonlyExampleModel
     fields = ("test_text",)
 
 
 @admin.register(app_models.AllReadonlyExampleModel)
-class AllReadonlyExampleModelAdmin(AllReadonlyAdminMixin, admin.ModelAdmin):
-    list_display = ("id", "test_text",)
+class AllReadonlyExampleModelAdmin(
+    admin_mixins.AllReadonlyAdminMixin, admin.ModelAdmin
+):
+    list_display = (
+        "id",
+        "test_text",
+    )
     fields = ("test_text",)
     inlines = [AllReadonlyExampleModelAdminInline]
 
 
 @admin.register(app_models.ConfigurableWidgetsExampleM2MModel)
 class ConfigurableWidgetsExampleM2MModelAdmin(admin.ModelAdmin):
-    list_display = ("id", "test_text",)
+    list_display = (
+        "id",
+        "test_text",
+    )
     fields = ("test_text",)
 
 
 @admin.register(app_models.ConfigurableWidgetsExampleFKModel)
 class ConfigurableWidgetsExampleFKModelAdmin(admin.ModelAdmin):
-    list_display = ("id", "test_text",)
+    list_display = (
+        "id",
+        "test_text",
+    )
     fields = ("test_text",)
 
 
 @admin.register(app_models.ConfigurableWidgetsExampleModel)
-class ConfigurableWidgetsExampleModelAdmin(ConfigurableWidgetsAdminMixin, admin.ModelAdmin):
-    list_display = ("id", "test_text",)
+class ConfigurableWidgetsExampleModelAdmin(
+    admin_mixins.ConfigurableWidgetsAdminMixin, admin.ModelAdmin
+):
+    list_display = (
+        "id",
+        "test_text",
+    )
     fieldsets = (
-        (None, {"fields": (
-            ("test_text",),
-            ("test_fk", "test_m2m",),
-        )}),
+        (
+            None,
+            {
+                "fields": (
+                    ("test_text",),
+                    (
+                        "test_fk",
+                        "test_m2m",
+                    ),
+                )
+            },
+        ),
     )
     filter_horizontal = ("test_m2m",)
     dbfield_overrides = {
-        "test_text": {"help_text": "Test Text Example help text", "widget": forms.Textarea},
+        "test_text": {
+            "help_text": "Test Text Example help text",
+            "widget": forms.Textarea,
+        },
     }
     fkfield_overrides = {
-        "test_fk": {"help_text": "Test FK Example help text", "widget": forms.RadioSelect},
+        "test_fk": {
+            "help_text": "Test FK Example help text",
+            "widget": forms.RadioSelect,
+        },
     }
     m2mfield_overrides = {
-        "test_m2m": {"help_text": "Test M2M Example help text", "widget": forms.CheckboxSelectMultiple}
+        "test_m2m": {
+            "help_text": "Test M2M Example help text",
+            "widget": forms.CheckboxSelectMultiple,
+        }
     }
 
 
-class DetailInInlineExampleModelAdminInline(DetailInInlineAdminMixin, admin.TabularInline):
+class DetailInInlineExampleModelAdminInline(
+    admin_mixins.DetailInInlineAdminMixin, admin.TabularInline
+):
     fields = ("test_text",)
     model = app_models.DetailInInlineExampleModel
 
@@ -165,29 +206,29 @@ class DetailInInlineExampleModelAdmin(admin.ModelAdmin):
 
 
 @admin.register(app_models.EmptyValueExampleModel)
-class EmptyValueExampleModelAdmin(EmptyValueAdminMixin, admin.ModelAdmin):
-    list_display = ("id", "test_text", "test_fk",)
+class EmptyValueExampleModelAdmin(admin_mixins.EmptyValueAdminMixin, admin.ModelAdmin):
+    list_display = (
+        "id",
+        "test_text",
+        "test_fk",
+    )
     fields = ("test_text", "test_fk")
-    empty_values = {
-        "test_fk": _("NO TEST FK")
-    }
+    empty_values = {"test_fk": _("NO TEST FK")}
 
 
 @admin.register(app_models.ExtraButtonExampleModel)
-class ExtraButtonExampleModelAdmin(ExtraButtonAdminMixin, admin.ModelAdmin):
+class ExtraButtonExampleModelAdmin(
+    admin_mixins.ExtraButtonAdminMixin, admin.ModelAdmin
+):
     list_display = ("id", "test_text")
     fields = ("test_text",)
     extra_button = [
-        {
-            "label": "Example Extra Button",
-            "url": "http://example.com",
-            "class": "ciccio"
-        }
+        {"label": "Example Extra Button", "url": "http://example.com", "class": ""}
     ]
 
 
 @admin.register(app_models.FloatingExampleModel)
-class FloatingExampleModelAdmin(FloatingAdminMixin, admin.ModelAdmin):
+class FloatingExampleModelAdmin(admin_mixins.FloatingAdminMixin, admin.ModelAdmin):
     list_display = ("id", "test_text")
     list_filter = ("test_text",)
     fields = ("test_text",)
@@ -195,21 +236,37 @@ class FloatingExampleModelAdmin(FloatingAdminMixin, admin.ModelAdmin):
 
 @admin.register(app_models.ImprovedRawIdFieldsExampleRelatedModel)
 class ImprovedRawIdFieldsExampleRelatedModelAdmin(admin.ModelAdmin):
-    list_display = ("id", "test_name",)
-    fieldsets = (
-        (None, {"fields": (
-            ("test_name",),
-        )}),
+    list_display = (
+        "id",
+        "test_name",
     )
+    fieldsets = ((None, {"fields": (("test_name",),)}),)
 
 
 @admin.register(app_models.ImprovedRawIdFieldsExampleModel)
-class ImprovedRawIdFieldsExampleModelAdmin(ImprovedRawIdFieldsAdminMixin, admin.ModelAdmin):
+class ImprovedRawIdFieldsExampleModelAdmin(
+    admin_mixins.ImprovedRawIdFieldsAdminMixin, admin.ModelAdmin
+):
     improved_raw_id_fields = ["test_fk", "test_m2m"]
-    list_display = ("id", "test_name",)
-    fieldsets = (
-        (None, {"fields": (
-            ("test_name",),
-            ("test_fk", "test_m2m"),
-        )}),
+    list_display = (
+        "id",
+        "test_name",
     )
+    fieldsets = (
+        (
+            None,
+            {
+                "fields": (
+                    ("test_name",),
+                    ("test_fk", "test_m2m"),
+                )
+            },
+        ),
+    )
+
+
+@admin.register(app_models.AdminFilterExampleModel)
+class AdminFilterExampleModelAdmin(admin.ModelAdmin):
+    list_display = ("id", "test_char", "test_fk")
+    list_filter = ("test_char",)
+    fieldsets = ((None, {"fields": (("test_char", "test_fk"),)}),)
