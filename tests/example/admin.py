@@ -4,7 +4,9 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
 from admin_toolkit import admin_mixins
+from admin_toolkit.admin_filters import RelatedSelectFilter, SelectFilter
 from tests.example import models as app_models
+from tests.example import admin_filters as app_admin_filters
 
 
 @admin.register(app_models.BaseExampleFkModel)
@@ -267,6 +269,10 @@ class ImprovedRawIdFieldsExampleModelAdmin(
 
 @admin.register(app_models.AdminFilterExampleModel)
 class AdminFilterExampleModelAdmin(admin.ModelAdmin):
-    list_display = ("id", "test_char", "test_fk")
-    list_filter = ("test_char",)
-    fieldsets = ((None, {"fields": (("test_char", "test_fk"),)}),)
+    list_display = ("id", "test_char", "get_test_choice_display", "test_fk")
+    list_filter = (
+        app_admin_filters.SimpleBooleanTestInTestCharFilter,
+        ("test_choice", SelectFilter),
+        ("test_fk", RelatedSelectFilter),
+    )
+    fieldsets = ((None, {"fields": (("test_char", "test_choice", "test_fk"),)}),)
