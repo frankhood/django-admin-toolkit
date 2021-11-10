@@ -492,6 +492,149 @@ This is the result:
         :alt: Improve Raw Id Fields admin mixin in changeform change Image.
 
 
+ADMIN FILTERS
+_____________
+This package also comes with a set of list filters
+that you can use to make it easier to write filters with special queries.
+
+
+.. image:: docs/readme_images/admin_filters_changelist.png
+    :alt: Admin filters changelist Image.
+
+CustomRelatedSelectFilter
+=========================
+Using this filter on Many to Many or Foreign Key it is possible
+to have a list of elements associated with the field inserted in the list_filter
+which becomes a select if the list exceeds 4 elements ordered according to a specific
+field of the foreign key or many to many.
+
+.. code-block:: python
+
+    class CustomRelatedSelectFilterForTestFK(admin_filters.CustomRelatedSelectFilter):
+
+        def get_related_order(self):
+            return ["test_char"]
+
+
+    class CustomRelatedSelectFilterForTestM2M(admin_filters.CustomRelatedSelectFilter):
+
+        def get_related_order(self):
+            return ["test_char"]
+
+    @admin.register(app_models.AdminFilterExampleModel)
+    class AdminFilterExampleModelAdmin(admin.ModelAdmin):
+        list_display = ("id", "test_char", "get_test_choice_display", "test_fk")
+        list_filter = (
+            ("test_fk", CustomRelatedSelectFilterForTestFK),
+            ("test_m2m", CustomRelatedSelectFilterForTestM2M),
+        )
+        fieldsets = (
+            (None, {"fields": (
+                ("test_char", "test_choice", "test_fk", "test_m2m"),
+            )}),
+        )
+
+
+This are the results:
+
+* For the field test_fk:
+
+    .. image:: docs/readme_images/admin_custom_related_filter_fk.png
+        :alt: Admin custom related filter for FK
+
+
+* For the field test_m2m:
+
+    .. image:: docs/readme_images/admin_custom_related_filter_m2m.png
+        :alt: Admin custom related filter for M2M
+
+
+RelatedSelectFilter
+===================
+Using this filter on Many to Many or Foreign Key it is possible
+to have a list of elements associated with the field inserted in the list_filter
+which becomes a select if the list exceeds 4 elements.
+
+.. code-block:: python
+
+    @admin.register(app_models.AdminFilterExampleModel)
+    class AdminFilterExampleModelAdmin(admin.ModelAdmin):
+        list_display = ("id", "test_char", "get_test_choice_display", "test_fk")
+        list_filter = (
+            ("test_fk", RelatedSelectFilter),
+        )
+        fieldsets = (
+            (None, {"fields": (
+                ("test_char", "test_choice", "test_fk", "test_m2m"),
+            )}),
+        )
+
+
+SelectFilter
+============
+This filter can be used on fields that contain choices to be able to display them in a select instead of seeing a bulleted list.
+
+.. code-block:: python
+
+    @admin.register(app_models.AdminFilterExampleModel)
+    class AdminFilterExampleModelAdmin(admin.ModelAdmin):
+        list_display = ("id", "test_char", "get_test_choice_display", "test_fk")
+        list_filter = (
+            ("test_choice", SelectFilter),
+        )
+        fieldsets = (
+            (None, {"fields": (
+                ("test_char", "test_choice", "test_fk", "test_m2m"),
+            )}),
+        )
+
+
+This is the result:
+
+.. image:: docs/readme_images/admin_select_filter.png
+    :alt: Admin select filter for choices Image.
+
+
+SimpleBooleanListFilter
+=======================
+This filter can be used to give a given query a boolean filter like this example:
+
+.. code-block:: python
+
+    # tests/example/admin_filters.py
+
+    class SimpleBooleanTestInTestCharFilter(admin_filters.SimpleBooleanListFilter):
+        title = "Test word is in Test char?"
+        parameter_name = "test_char"
+
+        def get_true_queryset_values(self, queryset):
+            return queryset.filter(test_char__icontains="test")
+
+        def get_false_queryset_values(self, queryset):
+            return queryset.exclude(test_char__icontains="test")
+
+    # tests/example/admin.py
+
+    from tests.example import admin_filters as app_admin_filters
+
+    @admin.register(app_models.AdminFilterExampleModel)
+    class AdminFilterExampleModelAdmin(admin.ModelAdmin):
+        list_display = ("id", "test_char", "get_test_choice_display", "test_fk")
+        list_filter = (
+            app_admin_filters.SimpleBooleanTestInTestCharFilter,
+        )
+        fieldsets = (
+            (None, {"fields": (
+                ("test_char", "test_choice", "test_fk", "test_m2m"),
+            )}),
+        )
+
+
+This is the result:
+
+.. image:: docs/readme_images/admin_boolean_filters.png
+    :alt: Admin boolean filter Image.
+
 Running Tests
 -------------
 

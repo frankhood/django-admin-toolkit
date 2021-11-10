@@ -128,5 +128,5 @@ class BaseAdminMixinUnitTest(TestCase):
                 "example_generic_relation_model_for_base_admin_mixin",
                 "Example Generic Relation Model For Base Admin Mixins",
             ),
-            """<a href="/admin/example/baseexamplegenericrelationmodel/?content_type=19&object_id=1" target="_blank">Display 1 Example Generic Relation Model For Base Admin Mixins</a>""",
+            """<a href="/admin/example/baseexamplegenericrelationmodel/?content_type=20&object_id=1" target="_blank">Display 1 Example Generic Relation Model For Base Admin Mixins</a>""",
         )

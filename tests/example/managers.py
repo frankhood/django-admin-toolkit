@@ -63,3 +63,7 @@ class ImprovedRawIdFieldsExampleRelatedModelManager(models.Manager):
 
 class AdminFilterExampleModelManager(models.Manager):
     ...
+
+
+class AdminFilterM2MExampleModelManager(models.Manager):
+    ...

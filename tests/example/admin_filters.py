@@ -12,3 +12,13 @@ class SimpleBooleanTestInTestCharFilter(admin_filters.SimpleBooleanListFilter):
 
     def get_false_queryset_values(self, queryset):
         return queryset.exclude(test_char__icontains="test")
+
+
+class CustomRelatedSelectFilterForTestFK(admin_filters.CustomRelatedSelectFilter):
+    def get_related_order(self):
+        return ["test_char"]
+
+
+class CustomRelatedSelectFilterForTestM2M(admin_filters.CustomRelatedSelectFilter):
+    def get_related_order(self):
+        return ["test_char"]

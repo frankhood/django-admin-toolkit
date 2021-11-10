@@ -5,8 +5,8 @@ from django.utils.translation import ugettext_lazy as _
 
 from admin_toolkit import admin_mixins
 from admin_toolkit.admin_filters import RelatedSelectFilter, SelectFilter
-from tests.example import models as app_models
 from tests.example import admin_filters as app_admin_filters
+from tests.example import models as app_models
 
 
 @admin.register(app_models.BaseExampleFkModel)
@@ -267,6 +267,12 @@ class ImprovedRawIdFieldsExampleModelAdmin(
     )
 
 
+@admin.register(app_models.AdminFilterM2MExampleModel)
+class AdminFilterM2MExampleModelAdmin(admin.ModelAdmin):
+    list_display = ("id", "test_char")
+    fieldsets = ((None, {"fields": (("test_char",),)}),)
+
+
 @admin.register(app_models.AdminFilterExampleModel)
 class AdminFilterExampleModelAdmin(admin.ModelAdmin):
     list_display = ("id", "test_char", "get_test_choice_display", "test_fk")
@@ -274,5 +280,9 @@ class AdminFilterExampleModelAdmin(admin.ModelAdmin):
         app_admin_filters.SimpleBooleanTestInTestCharFilter,
         ("test_choice", SelectFilter),
         ("test_fk", RelatedSelectFilter),
+        ("test_fk", app_admin_filters.CustomRelatedSelectFilterForTestFK),
+        ("test_m2m", app_admin_filters.CustomRelatedSelectFilterForTestM2M),
     )
-    fieldsets = ((None, {"fields": (("test_char", "test_choice", "test_fk"),)}),)
+    fieldsets = (
+        (None, {"fields": (("test_char", "test_choice", "test_fk", "test_m2m"),)}),
+    )
