@@ -33,6 +33,7 @@ jobs:
       env:
        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
+        python pip install -r requirements_test.txt
         python -m pip install .
         python -m pip install coveralls==3.1.0 coverage
         python -m coverage run --source django-admin-toolkit runtests.py
