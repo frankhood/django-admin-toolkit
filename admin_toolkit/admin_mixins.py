@@ -29,10 +29,7 @@ class AfterSaveAdminMixin(admin.ModelAdmin):
         return log
 
     def after_save(self, request, object, add, message):
-        """
-        It allows you to manage the operations to be performed
-        after saving an object and all its inlines
-        """
+        """Allow you to manage the operations to be performed after saving an object and all its inlines."""
         pass
 
 
@@ -66,6 +63,8 @@ class AllReadonlyAdminInlineMixin(object):
 
 class DetailInInlineAdminMixin(object):
     class Media:
+        """DetailInInlineAdminMixin Media."""
+
         css = {
             "all": ("css/admin_buttons.css",),
         }
@@ -119,12 +118,14 @@ class ExtraButtonAdminMixin(object):
 
 
 class FloatingAdminMixin(object):
-    """Inherit from this class to collapse filters in ChangeListView"""
+    """Inherit from this class to collapse filters in ChangeListView."""
 
     filter_image = "img/fh_filter.png"
     change_list_template = "admin/change_list_floating_filter.html"
 
     class Media:
+        """FloatingAdminMixin Media."""
+
         js = (
             "js/jquery.tabSlideOut.v1.3.js",
             "js/admin_floating.js",
@@ -143,7 +144,7 @@ class FloatingAdminMixin(object):
 
 class ImprovedRawIdFieldsAdminMixin(object):  # admin.ModelAdmin
     """
-    in your admin_mixins.py insert
+    Insert your admin_mixins.py.
 
     class YourModelAdmin(ImprovedRawIdFieldsAdminMixin,admin.ModelAdmin):
         ...
@@ -171,8 +172,9 @@ class ImprovedRawIdFieldsAdminMixin(object):  # admin.ModelAdmin
 
 class ConfigurableWidgetsAdminMixin(object):
     """
-    Use ConfigurableWidgetsMixinAdmin if you want to customize quickly
-    default widget/label/help_text or every related admin form configurations
+    Customize quickly default widget/label/help_text.
+
+    or every related admin form configurations
     without doing modifications of the autocreated ModelForm
 
     You can use it for InlineAdmin, too
@@ -214,19 +216,16 @@ class ConfigurableWidgetsAdminMixin(object):
 
     def formfield_for_dbfield(self, db_field, request=None, **kwargs):
         if self.dbfield_overrides and db_field.name in self.dbfield_overrides:
-            db_field.help_text = self.dbfield_overrides[db_field.name]
             kwargs.update(self.dbfield_overrides[db_field.name])
         return super().formfield_for_dbfield(db_field, request, **kwargs)
 
     def formfield_for_foreignkey(self, db_field, request=None, **kwargs):
         if self.fkfield_overrides and db_field.name in self.fkfield_overrides:
-            db_field.help_text = self.fkfield_overrides[db_field.name]
             kwargs.update(self.fkfield_overrides[db_field.name])
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         if self.m2mfield_overrides and db_field.name in self.m2mfield_overrides:
-            db_field.help_text = self.m2mfield_overrides[db_field.name]
             kwargs.update(self.m2mfield_overrides[db_field.name])
         return super().formfield_for_manytomany(db_field, request, **kwargs)
 
@@ -259,7 +258,8 @@ class BaseAdminMixin(object):
         return yesno(boolean_field)
 
     def _display_fk_object(self, fk_field):
-        """Use this method in your admin to display your fk object link
+        """
+        Use this method in your admin to display your fk object link.
 
         >> your_models.py
 
@@ -282,7 +282,8 @@ class BaseAdminMixin(object):
         )
 
     def _display_m2m_objects(self, obj, m2m_field_name, label="elements"):
-        """Use this method in your admin to display your m2m objects filtered changelist's link
+        """
+        Use this method in your admin to display your m2m objects filtered changelist's link.
 
         >> your_models.py
 
@@ -312,7 +313,8 @@ class BaseAdminMixin(object):
         )
 
     def _display_related_objects(self, obj, related_field_name, label="elements"):
-        """Use this method in your admin to display your 1..N or N..N objects (from related model) filtered changelist's link
+        """
+        Use this method in your admin to display your 1..N or N..N objects (from related model) filtered changelist's link.
 
         Example:
 
@@ -331,7 +333,6 @@ class BaseAdminMixin(object):
                     return mark_safe(self._display_related_objects(obj, devices, "devices"))
                 return "-"
             display_devices.short_description = _("Devices")
-
         """
         # @TODO use .remote_field
         related_manager = getattr(obj, related_field_name)
@@ -354,7 +355,8 @@ class BaseAdminMixin(object):
     def _display_generic_related_objects(
         self, obj, related_field_name, label="elements"
     ):
-        """Use this method in your admin to display your 1..N or N..N objects (from related model) filtered changelist's link
+        """
+        Use this method in your admin to display your 1..N or N..N objects (from related model) filtered changelist's link.
 
         Example:
 

@@ -18,3 +18,9 @@ __________________
 __________________
 
 * Fixed HISTORY.rst problems changing + to _ for versions.
+
+
+0.1.4 (2021-12-6)
+__________________
+
+* Fixed bug on ConfigurableWidgetsAdminMixin.
