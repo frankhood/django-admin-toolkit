@@ -5,7 +5,7 @@ import logging
 from django.contrib import admin, messages
 from django.contrib.admin import filters
 from django.db.models.fields import BLANK_CHOICE_DASH
-from django.utils.encoding import smart_text
+from django.utils.encoding import smart_str
 from django.utils.translation import gettext_lazy as _
 
 logger = logging.getLogger("django-admin-toolkit")
@@ -142,7 +142,7 @@ class CustomRelatedSelectFilter(RelatedSelectFilter):
         if related_order:
             queryset = queryset.order_by(*related_order)
         queryset = queryset.distinct()
-        lst = [(x._get_pk_val(), smart_text(x)) for x in queryset]
+        lst = [(x._get_pk_val(), smart_str(x)) for x in queryset]
         return first_choice + lst
 
     def field_choices(self, field, request, model_admin):
