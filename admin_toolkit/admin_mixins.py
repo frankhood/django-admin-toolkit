@@ -7,6 +7,7 @@ from django.contrib import admin
 from django.contrib.admin.sites import site
 from django.template.defaultfilters import yesno
 from django.templatetags.static import static
+from django.urls import reverse_lazy
 from django.utils import formats
 from django.utils.safestring import mark_safe
 from django.utils.timezone import get_current_timezone, localtime
@@ -301,20 +302,14 @@ class BaseAdminMixin(object):
                 return "-"
             display_users.short_description = _("Users")
         """
-        m2m_manager = getattr(obj, m2m_field_name)
-        m2m_field_related_name = m2m_manager.query_field_name
-        url = "{}?{}={}".format(
-            m2m_manager.model.admin_changelist_url(), m2m_field_related_name, obj.id
-        )
-        elements_count = m2m_manager.count()
-        return (
-            '<a href="{url}" target="_blank">Display {elements_count} {label}</a>'
-            "".format(url=url, elements_count=elements_count, label=label)
-        )
+        return self._display_related_objects(obj, m2m_field_name, label)
 
-    def _display_related_objects(self, obj, related_field_name, label="elements"):
+    def _display_related_objects(
+        self, obj, related_field_name, label="elements", show_generic_link=True
+    ):
         """
         Use this method in your admin to display your 1..N or N..N objects (from related model) filtered changelist's link.
+        set show_generic_link to false to show a list of all related objects links
 
         Example:
 
@@ -334,23 +329,28 @@ class BaseAdminMixin(object):
                 return "-"
             display_devices.short_description = _("Devices")
         """
-        # @TODO use .remote_field
         related_manager = getattr(obj, related_field_name)
         try:
-            # N..N
-            related_name = related_manager.source_field.name
+            # N..N direct and related
+            related_name = related_manager.query_field_name
         except AttributeError:
             # 1..N
             related_name = related_manager.field.name
         related_model = related_manager.model
-        url = "{}?{}={}".format(
-            related_model.admin_changelist_url(), related_name, obj.id
-        )
-        elements_count = related_manager.count()
-        return (
-            '<a href="{url}" target="_blank">Display {elements_count} {label}</a>'
-            "".format(url=url, elements_count=elements_count, label=label)
-        )
+        if show_generic_link:
+            url = "{}?{}__id__exact={}".format(
+                related_model.admin_changelist_url(), related_name, obj.id
+            )
+            elements_count = related_manager.count()
+            return (
+                '<a href="{url}" target="_blank">Display {elements_count} {label}</a>'
+                "".format(url=url, elements_count=elements_count, label=label)
+            )
+        else:
+            return "<br>".join(
+                f"""<a href='{reverse_lazy(f"admin:{related_obj._meta.app_label}_{related_obj._meta.model_name}_change", kwargs={"object_id": related_obj.id})}' target='_blank'>{related_obj.__str__()}</a>"""
+                for related_obj in related_manager.all()
+            )
 
     def _display_generic_related_objects(
         self, obj, related_field_name, label="elements"
@@ -388,7 +388,7 @@ class BaseAdminMixin(object):
         # @TODO use .remote_field
         related_manager = getattr(obj, related_field_name)
         related_model = related_manager.model
-        url = "{}?{}={}&{}={}".format(
+        url = "{}?{}__id__exact={}&{}__id__exact={}".format(
             related_model.admin_changelist_url(),
             related_manager.content_type_field_name,
             obj.get_ct().id,
