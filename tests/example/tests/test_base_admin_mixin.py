@@ -86,7 +86,7 @@ class BaseAdminMixinUnitTest(TestCase):
         admin = BaseExampleModelAdmin(models.BaseExampleModel, self.site)
         self.assertEqual(
             admin._display_m2m_objects(example, "test_m2m"),
-            """<a href="/admin/example/baseexamplem2mmodel/?example_for_base_admin_mixins=1" target="_blank">Display 3 elements</a>""",
+            """<a href="/admin/example/baseexamplem2mmodel/?example_for_base_admin_mixins__id__exact=1" target="_blank">Display 3 elements</a>""",
         )
 
     def test__display_related_objects(self):
@@ -100,7 +100,17 @@ class BaseAdminMixinUnitTest(TestCase):
             admin = BaseExampleModelAdmin(models.BaseExampleModel, self.site)
             self.assertEqual(
                 admin._display_related_objects(example, "test_m2m"),
-                """<a href="/admin/example/baseexamplem2mmodel/?baseexamplemodel=1" target="_blank">Display 3 elements</a>""",
+                """<a href="/admin/example/baseexamplem2mmodel/?example_for_base_admin_mixins__id__exact=1" target="_blank">Display 3 elements</a>""",
+            )
+        with self.subTest("M2M show_generic_link=False"):
+            m2m_object_1 = app_factories.BaseExampleM2MModelFactory()
+            example = app_factories.BaseExampleModelFactory(test_m2m=[m2m_object_1])
+            admin = BaseExampleModelAdmin(models.BaseExampleModel, self.site)
+            self.assertEqual(
+                admin._display_related_objects(
+                    example, "test_m2m", show_generic_link=False
+                ),
+                f"""<a href='/admin/example/baseexamplem2mmodel/{m2m_object_1.id}/change/' target='_blank'>{m2m_object_1.__str__()}</a>""",
             )
         with self.subTest("FK"):
             example = app_factories.BaseExampleFkModelFactory()
@@ -110,7 +120,7 @@ class BaseAdminMixinUnitTest(TestCase):
                 admin._display_related_objects(
                     example, "example_for_base_admin_mixins"
                 ),
-                """<a href="/admin/example/baseexamplemodel/?test_fk=2" target="_blank">Display 1 elements</a>""",
+                """<a href="/admin/example/baseexamplemodel/?test_fk__id__exact=3" target="_blank">Display 1 elements</a>""",
             )
 
     def test__display_generic_related_objects(self):
@@ -128,5 +138,5 @@ class BaseAdminMixinUnitTest(TestCase):
                 "example_generic_relation_model_for_base_admin_mixin",
                 "Example Generic Relation Model For Base Admin Mixins",
             ),
-            """<a href="/admin/example/baseexamplegenericrelationmodel/?content_type=20&object_id=1" target="_blank">Display 1 Example Generic Relation Model For Base Admin Mixins</a>""",
+            """<a href="/admin/example/baseexamplegenericrelationmodel/?content_type__id__exact=20&object_id__id__exact=1" target="_blank">Display 1 Example Generic Relation Model For Base Admin Mixins</a>""",
         )

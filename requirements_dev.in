@@ -9,4 +9,4 @@ factory-boy
 faker
 types-freezegun
 
-Django>=3
+Django<4

@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
 
-from django.conf.urls import include, url, static
-from django.contrib import admin
 from django.conf import settings
+from django.conf.urls import static
+from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from django.urls import path
 
 urlpatterns = [
-    url(r"^admin/", admin.site.urls),
+    path("admin/", admin.site.urls),
 ]
 
 
