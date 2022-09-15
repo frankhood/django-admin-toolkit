@@ -140,3 +140,24 @@ class BaseAdminMixinUnitTest(TestCase):
             ),
             """<a href="/admin/example/baseexamplegenericrelationmodel/?content_type__id__exact=20&object_id__id__exact=1" target="_blank">Display 1 Example Generic Relation Model For Base Admin Mixins</a>""",
         )
+
+    def test__display_related_objects_repr(self):
+        m2m_object_1 = app_factories.BaseExampleM2MModelFactory()
+        m2m_object_2 = app_factories.BaseExampleM2MModelFactory()
+        m2m_object_3 = app_factories.BaseExampleM2MModelFactory()
+        example = app_factories.BaseExampleModelFactory(
+            test_m2m=[m2m_object_1, m2m_object_2, m2m_object_3]
+        )
+        admin = BaseExampleModelAdmin(models.BaseExampleModel, self.site)
+        with self.subTest("Without separator"):
+            self.assertEqual(
+                admin._display_related_objects_repr(example, "test_m2m"),
+                f"""{m2m_object_1.__repr__()}|{m2m_object_2.__repr__()}|{m2m_object_3.__repr__()}""",
+            )
+        with self.subTest("With separator"):
+            self.assertEqual(
+                admin._display_related_objects_repr(
+                    example, "test_m2m", separator="<br>"
+                ),
+                f"""{m2m_object_1.__repr__()}<br>{m2m_object_2.__repr__()}<br>{m2m_object_3.__repr__()}""",
+            )
