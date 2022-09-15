@@ -400,3 +400,36 @@ class BaseAdminMixin(object):
             '<a href="{url}" target="_blank">Display {elements_count} {label}</a>'
             "".format(url=url, elements_count=elements_count, label=label)
         )
+
+    def _display_related_objects_repr(
+        self,
+        obj,
+        related_field_name,
+        separator="|",
+    ):
+        """
+        Use this method in your admin to display your 1..N or N..N objects (from related model) using the object __repr__() method.
+        You can change the separator between object changing separator attribute.
+
+        Example:
+
+        >> your_models.py
+
+        class Device(..):
+            users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="devices")
+
+        >> your_admin.py
+
+        @admin.register(User, UserAdmin):
+        class UserAdmin(...):
+
+            def display_devices(self, obj):
+                if obj and obj.devices.exists():
+                    return mark_safe(self._display_related_objects(obj, devices, separator="|"))
+                return "-"
+            display_devices.short_description = _("Devices")
+        """
+        related_manager = getattr(obj, related_field_name)
+        return separator.join(
+            related_obj.__repr__() for related_obj in related_manager.all()
+        )
